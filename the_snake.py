@@ -1,6 +1,7 @@
 # Импортируем необходимые модули
-from random import randint
 import pygame
+from random import randint
+
 
 # Константы для размеров поля и сетки
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
@@ -38,7 +39,7 @@ class GameObject:
     def __init__(self, position=(0, 0), body_color=(0, 0, 0)):
         self.position = position
         self.body_color = body_color
-
+        
     def draw(self):
         raise NotImplementedError("Подкласс должен реализовывать абстрактный метод")
 
@@ -49,7 +50,8 @@ class Apple(GameObject):
         self.position = self.randomize_position()
 
     def randomize_position(self):
-        return (randint(0, GRID_WIDTH - 1) * GRID_SIZE, randint(0, GRID_HEIGHT - 1) * GRID_SIZE)
+        return (randint(0, GRID_WIDTH - 1) * GRID_SIZE,
+                randint(0, GRID_HEIGHT - 1) * GRID_SIZE)
 
     def draw(self):
         rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
@@ -80,7 +82,8 @@ class Snake(GameObject):
     def move(self):
         cur = self.positions[0]
         x, y = self.direction
-        new = (((cur[0] + (x * GRID_SIZE)) % SCREEN_WIDTH), (cur[1] + (y * GRID_SIZE)) % SCREEN_HEIGHT)
+        new = (((cur[0] + (x * GRID_SIZE)) % SCREEN_WIDTH),
+               (cur[1] + (y * GRID_SIZE)) % SCREEN_HEIGHT)
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
         else:
@@ -118,6 +121,7 @@ def handle_keys(snake):
 
 # Основная функция игры
 def main():
+    """Основная функция игры."""
     pygame.init()
     snake = Snake()
     apple = Apple()
