@@ -35,9 +35,12 @@ clock = pygame.time.Clock()
 
 # Базовый класс для игровых объектов
 class GameObject:
-    def __init__(self, position, body_color):
+    def __init__(self, position=(0, 0), body_color=(0, 0, 0)):
         self.position = position
         self.body_color = body_color
+
+    def draw(self):
+        raise NotImplementedError("Подкласс должен реализовывать абстрактный метод")
 
 # Класс для яблока
 class Apple(GameObject):
@@ -61,6 +64,13 @@ class Snake(GameObject):
         self.direction = RIGHT
         self.next_direction = None
         self.body_color = SNAKE_COLOR
+
+    @property
+    def position(self):
+        return self.positions[0]
+
+    def get_head_position(self):
+        return self.positions[0]
 
     def update_direction(self):
         if self.next_direction:
