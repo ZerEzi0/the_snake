@@ -2,7 +2,6 @@
 import pygame
 from random import randint
 
-
 # Константы для размеров поля и сетки
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
@@ -39,7 +38,7 @@ class GameObject:
     def __init__(self, position=(0, 0), body_color=(0, 0, 0)):
         self.position = position
         self.body_color = body_color
-        
+
     def draw(self):
         raise NotImplementedError("Подкласс должен реализовывать абстрактный метод")
 
