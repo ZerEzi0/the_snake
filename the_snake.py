@@ -45,16 +45,20 @@ BOARD_BACKGROUND_COLOR = (0, 0, 0)
 class GameObject:
     """Базовый класс для игровых объектов."""
 
-    def __init__(self, position=None, body_color=(0, 0, 0), border_color=(0, 0, 0)):
+    def __init__(self, position=None, body_color=(0, 0, 0),
+                 border_color=(0, 0, 0)):
         if position is None:
-            position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)  # Set the position to the center of the screen by default
+            position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.position = position
         self.body_color = body_color
         self.border_color = border_color
 
     def draw(self):
         """Указание на реализацию абстрактного метода"""
-        error_message = f"Подкласс {self.__class__.__name__} должен реализовывать абстрактный метод"
+        error_message = (
+            f"Подкласс {self.__class__.__name__} должен реализовывать "
+            "абстрактный метод"
+        )
         raise NotImplementedError(error_message)
 
 
@@ -62,11 +66,12 @@ class GameObject:
 class Apple(GameObject):
     """Класс обозначает яблоко в игре."""
 
-    def __init__(self, position=None, body_color=APPLE_COLOR, border_color=BORDER_COLOR, occupied_positions=None):
+    def __init__(self, position=None, body_color=APPLE_COLOR,
+                 border_color=BORDER_COLOR, occupied_positions=None):
         if position is None:
             position = self.randomize_position(occupied_positions)
-        super().__init__(position=position, body_color=body_color, border_color=border_color)
-
+        super().__init__(position=position, body_color=body_color,
+                         border_color=border_color)
 
     def randomize_position(self, occupied_positions=None):
         """Определяет случайную позицию яблока"""
@@ -95,16 +100,12 @@ class Snake(GameObject):
     """Класс обозначает змейку в игре."""
 
     def __init__(self):
-        super().__init__(position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))  # Set the initial position to the center of the screen
+        super().__init__(position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
         self.body_color = SNAKE_COLOR
-
-    def get_head_position(self):
-        """Определяет голову змейки"""
-        return self.positions[0]
 
     def get_head_position(self):
         """Определяет голову змейки"""
