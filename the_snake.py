@@ -36,6 +36,7 @@ clock = pg.time.Clock()
 # Константы для размеров поля и сетки
 CENTER_POSITION = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
+
 # Базовый класс для игровых объектов
 class GameObject:
     """Базовый класс для игровых объектов."""
@@ -49,8 +50,10 @@ class GameObject:
     def draw(self):
         """Указание на реализацию абстрактного метода"""
         raise NotImplementedError(
-            f"Подкласс {self.__class__.__name__} должен реализовывать абстрактный метод"
+            f'Подкласс {self.__class__.__name__} должен'
+            'реализовывать абстрактный метод'
         )
+
 
 # Класс для яблока
 class Apple(GameObject):
@@ -73,6 +76,7 @@ class Apple(GameObject):
         rect = pg.Rect(self.position, (GRID_SIZE, GRID_SIZE))
         pg.draw.rect(screen, self.body_color, rect)
         pg.draw.rect(screen, self.border_color, rect, 1)
+
 
 # Класс для змейки
 class Snake(GameObject):
@@ -123,6 +127,7 @@ class Snake(GameObject):
             pg.draw.rect(screen, self.body_color, rect)
             pg.draw.rect(screen, BORDER_COLOR, rect, 1)
 
+
 # Функция обработки действий пользователя
 def handle_keys(snake):
     """Обрабатывает действия пользователя."""
@@ -142,6 +147,7 @@ def handle_keys(snake):
             elif event.key == pg.K_ESCAPE:
                 pg.quit()
                 raise SystemExit
+
 
 # Основная функция игры
 def main():
@@ -168,6 +174,7 @@ def main():
         snake.draw()
         apple.draw()
         pg.display.update()
+
 
 if __name__ == '__main__':
     main()
