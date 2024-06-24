@@ -22,7 +22,6 @@ SNAKE_COLOR = (0, 255, 0)
 
 # Скорость движения змейки
 SPEED = 20
-
 # Инициализация PyGame
 pg.init()
 
@@ -41,8 +40,10 @@ CENTER_POSITION = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 class GameObject:
     """Базовый класс для игровых объектов."""
 
-    def __init__(self, position, body_color, border_color):
-        self.position = position
+    def __init__(
+            self, body_color=SNAKE_COLOR, border_color=BOARD_BACKGROUND_COLOR
+    ):
+        self.position = CENTER_POSITION
         self.body_color = body_color
         self.border_color = border_color
 
@@ -59,7 +60,7 @@ class Apple(GameObject):
     """Класс обозначает яблоко в игре."""
 
     def __init__(self, body_color=APPLE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(CENTER_POSITION, body_color, border_color)
+        super().__init__(body_color=body_color, border_color=border_color)
         self.randomize_position()
 
     def randomize_position(self, occupied_positions=[CENTER_POSITION]):
@@ -81,8 +82,8 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Класс обозначает змейку в игре."""
 
-    def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(CENTER_POSITION, body_color, border_color)
+    def __init__(self, border_color=BORDER_COLOR):
+        super().__init__(body_color=SNAKE_COLOR, border_color=border_color)
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
