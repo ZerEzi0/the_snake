@@ -41,8 +41,7 @@ CENTER_POSITION = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 class GameObject:
     """Базовый класс для игровых объектов."""
 
-    def __init__(self, position=CENTER_POSITION, body_color=(0, 0, 0),
-                 border_color=BOARD_BACKGROUND_COLOR):
+    def __init__(self, position, body_color, border_color):
         self.position = position
         self.body_color = body_color
         self.border_color = border_color
@@ -60,7 +59,7 @@ class Apple(GameObject):
     """Класс обозначает яблоко в игре."""
 
     def __init__(self, body_color=APPLE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(body_color=body_color, border_color=border_color)
+        super().__init__(CENTER_POSITION, body_color, border_color)
         self.randomize_position()
 
     def randomize_position(self, occupied_positions=[CENTER_POSITION]):
@@ -82,10 +81,8 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Класс обозначает змейку в игре."""
 
-    def __init__(self, position=CENTER_POSITION, body_color=SNAKE_COLOR,
-                 border_color=BORDER_COLOR):
-        super().__init__(position=position, body_color=body_color,
-                         border_color=border_color)
+    def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
+        super().__init__(CENTER_POSITION, body_color, border_color)
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
@@ -110,13 +107,13 @@ class Snake(GameObject):
         )
         self.positions.insert(0, new)
         if len(self.positions) > self.length:
-            self.positions.pop()
+            self.last = self.positions.pop()
         self.position = new
 
     def reset(self):
         """Сбрасывает змейку в начальное состояние."""
         self.length = 1
-        self.positions = [self.position]
+        self.positions = [CENTER_POSITION]
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
 
@@ -126,6 +123,10 @@ class Snake(GameObject):
             rect = pg.Rect((p[0], p[1]), (GRID_SIZE, GRID_SIZE))
             pg.draw.rect(screen, self.body_color, rect)
             pg.draw.rect(screen, BORDER_COLOR, rect, 1)
+        pg.draw.rect(
+            screen, BOARD_BACKGROUND_COLOR,
+            (self.last[0], self.last[1], GRID_SIZE, GRID_SIZE)
+        )
 
 
 # Функция обработки действий пользователя
