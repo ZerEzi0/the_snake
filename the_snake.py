@@ -22,6 +22,7 @@ SNAKE_COLOR = (0, 255, 0)
 
 # Скорость движения змейки
 SPEED = 20
+
 # Инициализация PyGame
 pg.init()
 
@@ -41,9 +42,11 @@ class GameObject:
     """Базовый класс для игровых объектов."""
 
     def __init__(
-            self, body_color=SNAKE_COLOR, border_color=BOARD_BACKGROUND_COLOR
+            self, position=CENTER_POSITION,
+            body_color=SNAKE_COLOR,
+            border_color=BOARD_BACKGROUND_COLOR
     ):
-        self.position = CENTER_POSITION
+        self.position = position
         self.body_color = body_color
         self.border_color = border_color
 
@@ -60,7 +63,7 @@ class Apple(GameObject):
     """Класс обозначает яблоко в игре."""
 
     def __init__(self, body_color=APPLE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(body_color=body_color, border_color=border_color)
+        super().__init__(CENTER_POSITION, body_color, border_color)
         self.randomize_position()
 
     def randomize_position(self, occupied_positions=[CENTER_POSITION]):
@@ -82,12 +85,13 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Класс обозначает змейку в игре."""
 
-    def __init__(self, border_color=BORDER_COLOR):
-        super().__init__(body_color=SNAKE_COLOR, border_color=border_color)
+    def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
+        super().__init__(CENTER_POSITION, body_color, border_color)
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
+        self.last = self.position
 
     def get_head_position(self):
         """Определяет голову змейки"""
@@ -102,14 +106,14 @@ class Snake(GameObject):
     def move(self):
         """Перемещает змейку в соответствии с текущим направлением."""
         x, y = self.direction
+        head_x, head_y = self.get_head_position()
         new = (
-            ((self.position[0] + (x * GRID_SIZE)) % SCREEN_WIDTH),
-            ((self.position[1] + (y * GRID_SIZE)) % SCREEN_HEIGHT)
+            ((head_x + (x * GRID_SIZE)) % SCREEN_WIDTH),
+            ((head_y + (y * GRID_SIZE)) % SCREEN_HEIGHT)
         )
         self.positions.insert(0, new)
         if len(self.positions) > self.length:
             self.last = self.positions.pop()
-        self.position = new
 
     def reset(self):
         """Сбрасывает змейку в начальное состояние."""
@@ -117,17 +121,14 @@ class Snake(GameObject):
         self.positions = [CENTER_POSITION]
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
+        self.last = self.position
 
     def draw(self):
         """Рисует змейку на экране."""
         for p in self.positions:
             rect = pg.Rect((p[0], p[1]), (GRID_SIZE, GRID_SIZE))
             pg.draw.rect(screen, self.body_color, rect)
-            pg.draw.rect(screen, BORDER_COLOR, rect, 1)
-        pg.draw.rect(
-            screen, BOARD_BACKGROUND_COLOR,
-            (self.last[0], self.last[1], GRID_SIZE, GRID_SIZE)
-        )
+            pg.draw.rect(screen, self.border_color, rect, 1)
 
 
 # Функция обработки действий пользователя
