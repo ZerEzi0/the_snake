@@ -33,6 +33,7 @@ pg.display.set_caption('Змейка')
 # Настройка времени
 clock = pg.time.Clock()
 
+
 # Константы для размеров поля и сетки
 CENTER_POSITION = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
@@ -62,12 +63,19 @@ class GameObject:
 class Apple(GameObject):
     """Класс обозначает яблоко в игре."""
 
-    def __init__(self, body_color=APPLE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(CENTER_POSITION, body_color, border_color)
+    def __init__(self,
+                 body_color=APPLE_COLOR,
+                 border_color=BORDER_COLOR):
+        super().__init__(
+            CENTER_POSITION,
+            body_color, border_color
+        )
         self.randomize_position()
 
-    def randomize_position(self, occupied_positions=[CENTER_POSITION]):
+    def randomize_position(self, occupied_positions=None):
         """Определяет случайную позицию яблока"""
+        if occupied_positions is None:
+            occupied_positions = []
         while self.position in occupied_positions:
             self.position = (
                 randint(0, GRID_WIDTH - 1) * GRID_SIZE,
@@ -86,12 +94,14 @@ class Snake(GameObject):
     """Класс обозначает змейку в игре."""
 
     def __init__(self, body_color=SNAKE_COLOR, border_color=BORDER_COLOR):
-        super().__init__(CENTER_POSITION, body_color, border_color)
+        super().__init__(
+            CENTER_POSITION,
+            body_color, border_color
+        )
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
-        self.last = self.position
 
     def get_head_position(self):
         """Определяет голову змейки"""
@@ -113,15 +123,14 @@ class Snake(GameObject):
         )
         self.positions.insert(0, new)
         if len(self.positions) > self.length:
-            self.last = self.positions.pop()
+            self.positions.pop()
 
     def reset(self):
         """Сбрасывает змейку в начальное состояние."""
         self.length = 1
-        self.positions = [CENTER_POSITION]
+        self.positions = [self.position]
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
-        self.last = self.position
 
     def draw(self):
         """Рисует змейку на экране."""
